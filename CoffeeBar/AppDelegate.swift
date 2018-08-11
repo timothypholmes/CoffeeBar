@@ -7,21 +7,60 @@
 //
 
 import Cocoa
+import CoreFoundation
+import Foundation
+import IOKit.pwr_mgt
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
-
-    @IBOutlet weak var window: NSWindow!
-
-
+    
+//  Define variables
+    
+    var iconOff: NSImage!
+    var iconOn: NSImage!
+    var statusItem: NSStatusItem!
+    var powerAssertion: PowerAssertion!
+    
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        // Insert code here to initialize your application
+        
+       // statusItem.title = "CoffeeBar"
+       // statusItem.menu = statusMenu
+        
+//  Define the image when off
+        
+        iconOff = NSImage(named: NSImage.Name(rawValue: "coffeeBarOff"))
+        
+//        Uncomment for template use
+//        iconOff.isTemplate = true
+        
+//  Define the image when on
+        
+        iconOn = NSImage(named: NSImage.Name(rawValue: "coffeeBarOn"))
+        
+//        Uncomment for template use
+//        iconOn.isTemplate = true
+        
+        statusItem = NSStatusBar.system.statusItem(withLength: -1)
+        statusItem.image = iconOff
+        statusItem.action = #selector(AppDelegate.togglePowerAssertion)
     }
-
+    
     func applicationWillTerminate(_ aNotification: Notification) {
-        // Insert code here to tear down your application
     }
-
-
+    
+    @objc func togglePowerAssertion() {
+        if statusItem.image == iconOff {
+            
+            powerAssertion = PowerAssertion(named: "coffeeUp")
+            statusItem.image = iconOn
+            
+        } else {
+            
+            powerAssertion = nil
+            statusItem.image = iconOff
+            
+        }
+    }
 }
+
 
